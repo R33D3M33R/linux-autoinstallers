@@ -3,11 +3,13 @@
 #License: GPLv3
 
 # errors: bash autoinstall.sh >out.txt 2>&1
+default_user='htpc'
 sources_list='/etc/apt/sources.list'
 tvheadend_list='/etc/apt/sources.list.d/tvheadend.list'
 grub_default='/etc/default/grub'
 nfs_exports='/etc/exports'
-homedir='/home/skrbnik/'
+homedir="/home/$default_user/"
+kdm_config='/etc/kde4/kdm/kdmrc'
 xbmc_autostart="$homedir.kde/Autostart/xbmc"
 
 # the script must be run by root
@@ -39,7 +41,7 @@ echo 'Installing packages ...'
 # main system
 apt-get install -y desktop-base k3b kde-workspace ktorrent nfs-kernel-server pavucontrol plymouth plymouth-themes pm-utils quassel-core
 # hardware support
-apt-get install -y firmware-linux-nonfree mesa-vdpau-drivers
+apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
 # xbmc
 apt-get install -y tvheadend xbmc xbmc-pvr-tvheadend-hts
 # localization
@@ -82,6 +84,15 @@ if grep -q "$homedir 192.168.1.0/24(rw,nohide,insecure,no_subtree_check,async)" 
 else
   echo 'Setting NFS exports ...'
   echo "$homedir 192.168.1.0/24(rw,nohide,insecure,no_subtree_check,async)" >> $nfs_exports
+fi
+
+# KDE autologin
+if grep -q '#AutoLoginEnable=true' $kdm_config; then
+  echo 'Enabling autologin ...'
+  sed -i.bak1 's/#AutoLoginEnable=true/AutoLoginEnable=true/' $kdm_config
+  sed -i.bak2 "s/#AutoLoginUser=fred/AutoLoginUser=$default_user/" $kdm_config
+else
+  echo 'KDE autologin already enabled!'  
 fi
 
 # autostart XBMC on boot
