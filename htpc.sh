@@ -39,7 +39,7 @@ apt-get update
 
 echo 'Installing packages ...'
 # main system
-apt-get install -y desktop-base k3b kde-workspace ktorrent nfs-kernel-server pavucontrol plymouth plymouth-themes pm-utils quassel-core
+apt-get install -y desktop-base k3b kde-workspace ktorrent nfs-kernel-server pavucontrol plymouth plymouth-themes pm-utils rsync quassel-core
 # hardware support
 apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
 # xbmc
