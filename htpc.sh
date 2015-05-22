@@ -46,6 +46,8 @@ apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
 apt-get install -y tvheadend xbmc xbmc-pvr-tvheadend-hts
 # localization
 apt-get install kde-l10n-sl k3b-i18n
+# bluetooth
+apt-get install -y bluedevil bluez bluez-firmware bluez-tools pulseaudio-module-bluetooth
 
 # cleanup
 apt-get clean
