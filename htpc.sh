@@ -32,7 +32,7 @@ if [[ -f $tvheadend_list ]]; then
 else
   echo 'Enabling tvheadend repository ...'
   wget -qO - http://apt.tvheadend.org/repo.gpg.key | sudo apt-key add -
-  echo 'deb http://apt.tvheadend.org/stable wheezy main' > $tvheadend_list
+  echo 'deb http://apt.tvheadend.org/stable jessie main' > $tvheadend_list
 fi
 
 apt-get update
@@ -42,6 +42,8 @@ echo 'Installing packages ...'
 apt-get install -y desktop-base k3b kde-workspace ktorrent nfs-kernel-server pavucontrol plymouth plymouth-themes pm-utils rsync quassel-core
 # hardware support
 apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
+# owncloud
+apt-get install -y owncloud mysql-server phpmyadmin
 # xbmc
 apt-get install -y tvheadend xbmc xbmc-pvr-tvheadend-hts
 # localization
