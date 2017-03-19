@@ -1,5 +1,5 @@
 #!/bin/bash 
-#Author: Andrej Mernik, 2015, http://andrej.mernik.eu/
+#Author: Andrej Mernik, 2015-2017, https://andrej.mernik.eu/
 #License: GPLv3
 
 # errors: bash autoinstall.sh >out.txt 2>&1
