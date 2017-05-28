@@ -5,7 +5,6 @@
 # errors: bash autoinstall.sh >out.txt 2>&1
 default_user='htpc'
 sources_list='/etc/apt/sources.list'
-tvheadend_list='/etc/apt/sources.list.d/tvheadend.list'
 grub_default='/etc/default/grub'
 nfs_exports='/etc/exports'
 homedir="/home/$default_user/"
@@ -26,15 +25,6 @@ else
   sed -i.bak 's/main/main contrib non-free/' $sources_list
 fi
 
-# add the tvheadend repository
-if [[ -f $tvheadend_list ]]; then
-    echo 'Tvheadend repository already enabled!'
-else
-  echo 'Enabling tvheadend repository ...'
-  wget -qO - http://apt.tvheadend.org/repo.gpg.key | sudo apt-key add -
-  echo 'deb http://apt.tvheadend.org/stable jessie main' > $tvheadend_list
-fi
-
 apt-get update
 
 echo 'Installing packages ...'
@@ -45,7 +35,7 @@ apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
 # owncloud
 apt-get install -y owncloud mysql-server phpmyadmin
 # xbmc
-apt-get install -y tvheadend xbmc xbmc-pvr-tvheadend-hts
+apt-get install -y xbmc
 # localization
 apt-get install kde-l10n-sl k3b-i18n
 # bluetooth
