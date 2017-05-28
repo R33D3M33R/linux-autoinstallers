@@ -29,17 +29,15 @@ apt-get update
 
 echo 'Installing packages ...'
 # main system
-apt-get install -y desktop-base k3b kde-workspace ktorrent nfs-kernel-server pavucontrol plymouth plymouth-themes pm-utils rsync quassel-core
+apt-get install -y desktop-base k3b nfs-kernel-server plymouth plymouth-themes pm-utils qbittorrent rsync
 # hardware support
-apt-get install -y firmware-linux-nonfree firmware-realtek mesa-vdpau-drivers
+apt-get install -y firmware-linux-nonfree firmware-realtek
 # owncloud
 apt-get install -y owncloud mysql-server phpmyadmin
 # xbmc
 apt-get install -y xbmc
 # localization
 apt-get install kde-l10n-sl k3b-i18n
-# bluetooth
-apt-get install -y bluedevil bluez bluez-firmware bluez-tools pulseaudio-module-bluetooth
 
 # cleanup
 apt-get clean
