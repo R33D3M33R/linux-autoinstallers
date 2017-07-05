@@ -45,6 +45,8 @@ apt-get install -y firmware-linux-nonfree firmware-realtek
 apt-get install -y kodi
 # localization
 apt-get install -y kde-l10n-sl k3b-i18n firefox-esr-l10n-sl
+# seafile dependencies
+apt-get install -y python-setuptools sqlite3
 
 # cleanup
 apt-get clean
