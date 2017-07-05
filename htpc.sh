@@ -9,7 +9,7 @@ grub_default='/etc/default/grub'
 nfs_exports='/etc/exports'
 homedir="/home/$default_user/"
 sddm_config='/etc/sddm.conf'
-kodi_autostart="$HOME/.config/autostart/kodi"
+xsession_file='kodi.desktop'
 
 # the script must be run by root
 if [[ $(id -u) -ne 0 ]]; then
@@ -86,22 +86,17 @@ else
 fi
 
 # KDE autologin
-if grep -q "User=$default_user" $sddm_config && grep -q "Session=plasma.desktop" $sddm_config; then
-  echo 'KDE autologin already enabled!'  
+if [ -f "$sddm_config" ]; then
+    #sddm config exists
+    if grep -q "User=$default_user" $sddm_config && grep -q "Session=$xsession_file" $sddm_config; then
+        echo 'KDE autologin already enabled!'  
+    else
+        if [ -f "/usr/share/xsessions/$xsession_file" ]; then
+          echo 'Enabling autologin ...'
+          sed -i.bak1 "s/User=/User=$default_user/" $sddm_config
+          sed -i.bak2 "s/Session=/Session=$xsession_file/" $sddm_config
+        fi
 else
-  echo 'Enabling autologin ...'
-  sed -i.bak1 "s/User=/User=$default_user/" $sddm_config
-  sed -i.bak2 "s/Session=/Session=plasma.desktop/" $sddm_config
-fi
-
-# autostart XBMC on boot
-if [[ -d "$homedir.config/" ]]; then
-  if [[ -L "$kodi_autostart" ]]; then
-      echo 'Kodi already set to autostart!'
-  else
-    echo 'Enabling Kodi autostart ...'
-    ln -s /usr/bin/kodi $kodi_autostart
-  fi
-else
-  echo 'Start KDE once and restart this script! Kodi not set to autostart'
+    #generate sddm config
+    echo "[Autologin]\nSession=$xsession_file\nUser=$default_user" > $sddm_config
 fi
