@@ -100,5 +100,5 @@ if [ -f "$sddm_config" ]; then
 else
     #generate sddm config
     echo 'Enabling autologin ...'
-    echo "[Autologin]\nSession=$xsession_file\nUser=$default_user" > $sddm_config
+    printf "[Autologin]\nSession=$xsession_file\nUser=$default_user" > $sddm_config
 fi
