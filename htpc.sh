@@ -8,8 +8,8 @@ sources_list='/etc/apt/sources.list'
 grub_default='/etc/default/grub'
 nfs_exports='/etc/exports'
 homedir="/home/$default_user/"
-kdm_config='/etc/kde4/kdm/kdmrc'
-xbmc_autostart="$homedir.kde/Autostart/xbmc"
+sddm_config='/etc/sddm.conf'
+kodi_autostart="$HOME/.config/autostart/kodi"
 
 # the script must be run by root
 if [[ $(id -u) -ne 0 ]]; then
@@ -25,19 +25,26 @@ else
   sed -i.bak 's/main/main contrib non-free/' $sources_list
 fi
 
+# enable backports
+if grep -q 'stretch-backports' $sources_list; then
+    echo 'Backports already enabled!'
+else
+  echo 'Enabling backports ...'
+  cp $sources_list "sources_list.bak"
+  echo 'deb http://ftp.si.debian.org/debian stretch-backports main contrib non-free' >> $sources_list
+fi
+
 apt-get update
 
 echo 'Installing packages ...'
 # main system
-apt-get install -y desktop-base k3b nfs-kernel-server plymouth plymouth-themes pm-utils qbittorrent rsync
+apt-get install -y desktop-base firefox-esr k3b nfs-kernel-server plymouth plymouth-themes pm-utils qbittorrent rsync
 # hardware support
 apt-get install -y firmware-linux-nonfree firmware-realtek
-# owncloud
-apt-get install -y owncloud mysql-server phpmyadmin
-# xbmc
-apt-get install -y xbmc
+# kodi
+apt-get install -y kodi
 # localization
-apt-get install kde-l10n-sl k3b-i18n
+apt-get install -y kde-l10n-sl k3b-i18n firefox-esr-l10n-sl
 
 # cleanup
 apt-get clean
@@ -61,11 +68,11 @@ if [[ $grub_update -eq 1 ]]; then
 fi
 
 # plymouth
-if [ "$(/usr/sbin/plymouth-set-default-theme)" == "lines" ]; then
-  echo "Boot theme already set to lines!"
-elif /usr/sbin/plymouth-set-default-theme --list | grep -q lines; then
-  echo "Setting boot theme to lines ..."
-  /usr/sbin/plymouth-set-default-theme -R lines
+if [ "$(/usr/sbin/plymouth-set-default-theme)" == "softwaves" ]; then
+  echo "Boot theme already set to softwaves!"
+elif /usr/sbin/plymouth-set-default-theme --list | grep -q softwaves; then
+  echo "Setting boot theme to softwaves ..."
+  /usr/sbin/plymouth-set-default-theme -R softwaves
 else
   echo 'Cannot set plymouth theme. Check if desktop-base is installed!'
 fi
@@ -79,22 +86,22 @@ else
 fi
 
 # KDE autologin
-if grep -q '#AutoLoginEnable=true' $kdm_config; then
-  echo 'Enabling autologin ...'
-  sed -i.bak1 's/#AutoLoginEnable=true/AutoLoginEnable=true/' $kdm_config
-  sed -i.bak2 "s/#AutoLoginUser=fred/AutoLoginUser=$default_user/" $kdm_config
-else
+if grep -q "User=$default_user" $sddm_config && grep -q "Session=plasma.desktop" $sddm_config; then
   echo 'KDE autologin already enabled!'  
+else
+  echo 'Enabling autologin ...'
+  sed -i.bak1 "s/User=/User=$default_user/" $sddm_config
+  sed -i.bak2 "s/Session=/Session=plasma.desktop/" $sddm_config
 fi
 
 # autostart XBMC on boot
-if [[ -d "$homedir.kde/" ]]; then
-  if [[ -L "$xbmc_autostart" ]]; then
-      echo 'XMBC already set to autostart!'
+if [[ -d "$homedir.config/" ]]; then
+  if [[ -L "$kodi_autostart" ]]; then
+      echo 'Kodi already set to autostart!'
   else
-    echo 'Enabling XBMC autostart ...'
-    ln -s /usr/bin/xbmc $xbmc_autostart
+    echo 'Enabling Kodi autostart ...'
+    ln -s /usr/bin/kodi $kodi_autostart
   fi
 else
-  echo 'Start KDE once and restart this script! XBMC not set to autostart'
+  echo 'Start KDE once and restart this script! Kodi not set to autostart'
 fi
