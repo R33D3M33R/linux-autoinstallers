@@ -96,7 +96,9 @@ if [ -f "$sddm_config" ]; then
           sed -i.bak1 "s/User=/User=$default_user/" $sddm_config
           sed -i.bak2 "s/Session=/Session=$xsession_file/" $sddm_config
         fi
+    fi
 else
     #generate sddm config
+    echo 'Enabling autologin ...'
     echo "[Autologin]\nSession=$xsession_file\nUser=$default_user" > $sddm_config
 fi
