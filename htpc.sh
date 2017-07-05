@@ -38,7 +38,7 @@ apt-get update
 
 echo 'Installing packages ...'
 # main system
-apt-get install -y desktop-base firefox-esr k3b nfs-kernel-server plymouth plymouth-themes pm-utils qbittorrent rsync
+apt-get install -y desktop-base firefox-esr k3b kde-plasma-desktop nfs-kernel-server plymouth plymouth-themes pm-utils qbittorrent rsync
 # hardware support
 apt-get install -y firmware-linux-nonfree firmware-realtek
 # kodi
